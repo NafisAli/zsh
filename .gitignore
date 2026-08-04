@@ -1,0 +1,10 @@
+# Plugin clones -- recreated automatically by plugins.zsh on first shell start
+plugins/
+
+# Runtime state. History and the completion cache live under the XDG dirs, but
+# /etc/zshrc points HISTFILE at $ZDOTDIR/.zsh_history before .zshrc overrides
+# it, so a stray history file can reappear in this directory.
+.zsh_history
+.zcompdump*
+*.zwc
+.zsh_sessions/
