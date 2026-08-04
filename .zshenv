@@ -20,7 +20,10 @@ elif command -v batcat >/dev/null 2>&1; then
 fi
 
 # ---------- GPG ----------
-export GPG_TTY=$(tty)
+# $TTY is set by zsh itself, so this avoids forking `tty` on every shell start
+# (.zshenv runs for scripts and hooks too). In a non-interactive shell it is
+# empty, which gpg treats as unset -- unlike `$(tty)`, which yields "not a tty".
+export GPG_TTY=$TTY
 
 # ---------- PATH ----------
 # Personal binaries/scripts
