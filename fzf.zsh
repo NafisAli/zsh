@@ -21,8 +21,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="
   --height 40%
   --layout=reverse
-  --border
-  --preview 'bat --style=numbers --color=always {}'
+  --border=rounded
 "
 
 export _FZF_PREVIEW_CMD='bat --color=always --style=plain,numbers --line-range=:500 {}'
