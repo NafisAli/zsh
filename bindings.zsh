@@ -35,4 +35,7 @@ zvm_after_init() {
   # Up/Down -> history search by substring (^[[A/^[[B are up/down arrow escape codes)
   bindkey '^[[A' history-substring-search-up
   bindkey '^[[B' history-substring-search-down
+
+  # Ctrl+R -> fzf history search (must be re-bound; zsh-vi-mode wipes it)
+  bindkey '^R' fzf-history-widget
 }
