@@ -13,7 +13,7 @@ Plugins are managed by a ~20-line function in `plugins.zsh`, so there is no fram
 | `.zshenv` | XDG base dirs, `EDITOR`/`VISUAL`, `MANPAGER`, `GPG_TTY`, `PATH`. Read by *every* zsh, including scripts. |
 | `.zshrc` | History, shell options, zoxide, completion system, fzf key bindings, and the `source` list for everything below. Interactive shells only. |
 | `aliases.zsh` | `eza` listing aliases, colourised `diff`, `cd -`, arch-switch shells. |
-| `bindings.zsh` | Key bindings and `zsh-vi-mode` cursor/highlight settings. |
+| `bindings.zsh` | Key bindings. |
 | `fzf.zsh` | fzf environment (`fd` as the source, `bat` previews) and the `Ctrl+F` picker widget. |
 | `plugins.zsh` | The plugin manager and the plugin list. |
 | `node.zsh` | Lazy-loading nvm. |
@@ -30,9 +30,7 @@ Plugins are managed by a ~20-line function in `plugins.zsh`, so there is no fram
        -> fzf.zsh -> aliases.zsh -> bindings.zsh -> plugins.zsh -> node.zsh -> prompt.zsh
 ```
 
-Order matters in two places: the Docker `fpath` entry must precede `compinit`, and
-`bindings.zsh` must be sourced before `plugins.zsh` so that `zvm_after_init` is defined
-before `zsh-vi-mode` calls it.
+Order matters in one place: the Docker `fpath` entry must precede `compinit`.
 
 ## Prerequisites
 
@@ -85,7 +83,7 @@ EOF
 
 The `-d` guard means the file is harmless on a machine where the repo isn't cloned yet.
 
-**3. Open a new terminal.** On first start the four plugins clone themselves and the state
+**3. Open a new terminal.** On first start the three plugins clone themselves and the state
 and cache directories are created. Expect a few "Installing …" lines once, then nothing.
 
 **4. Verify.**
@@ -107,7 +105,6 @@ Currently loaded, in order:
 
 | Plugin | What it does |
 | --- | --- |
-| [zsh-vi-mode](https://github.com/jeffreytse/zsh-vi-mode) | vi editing modes with a mode-aware cursor |
 | [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | inline greyed-out suggestion from history |
 | [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search) | substring history search on the arrow keys |
 | [fast-syntax-highlighting](https://github.com/zdharma-continuum/fast-syntax-highlighting) | command-line syntax colouring |
@@ -121,7 +118,7 @@ zplugin-update
 Reinstall a broken one by deleting it and starting a new shell:
 
 ```bash
-rm -rf ~/.config/zsh/plugins/zsh-vi-mode
+rm -rf ~/.config/zsh/plugins/<name>
 ```
 
 ## Node / nvm
@@ -160,14 +157,11 @@ Note two things about how it interacts with this repo:
 | `Ctrl+←` / `Ctrl+→` | move back/forward one word |
 | `↑` / `↓` | history search by substring |
 | `Ctrl+\` | toggle autosuggestions |
-| `Esc` | leave insert mode (vi-mode) |
 
 On macOS, Option+C emits the literal character `ç` rather than a usable `Alt-C` escape
 sequence, which is why `ç` is bound explicitly.
 
-**Adding bindings:** `zsh-vi-mode` rebuilds the keymaps when it initialises, discarding
-bindings made earlier. Put new `bindkey` calls inside the `zvm_after_init` function in
-`bindings.zsh` so they survive.
+**Adding bindings:** add new `bindkey` calls directly in `bindings.zsh`.
 
 ## Aliases
 
@@ -228,9 +222,9 @@ rm ~/.cache/zsh/zcompdump
 
 Then open a new shell.
 
-**`Ctrl+F` or the arrow-key history search stopped working.** Something is binding keys
-after `zsh-vi-mode` initialises, or a binding was added outside `zvm_after_init`. Inspect
-the live keymap with `bindkey | grep -i <widget-name>`.
+**`Ctrl+F` or the arrow-key history search stopped working.** Something later in
+`bindings.zsh` (or a plugin) is overriding the binding. Inspect the live keymap with
+`bindkey | grep -i <widget-name>`.
 
 **Startup got slow.** Time it, then bisect:
 
