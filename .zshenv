@@ -26,5 +26,9 @@ fi
 export GPG_TTY=$TTY
 
 # ---------- PATH ----------
+# mise version manager shims
+[[ -d "$HOME/.local/share/mise/shims" ]] && export PATH="$HOME/.local/share/mise/shims:$PATH"
+
 # Personal binaries/scripts
 export PATH="$HOME/.local/bin:$PATH"
+
