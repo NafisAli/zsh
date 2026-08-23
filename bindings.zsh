@@ -5,7 +5,9 @@
 # fzf
 # Option-C on macOS outputs "ç" instead of a usable Alt-C sequence,
 # so fzf-cd-widget never triggers unless it's also bound to that key.
-bindkey "ç" fzf-cd-widget
+if [[ "$OSTYPE" == darwin* ]]; then
+  bindkey "ç" fzf-cd-widget
+fi
 
 # Ctrl+Right -> move forward one word (^[[1;5C is the terminal escape code)
 bindkey '^[[1;5C' forward-word

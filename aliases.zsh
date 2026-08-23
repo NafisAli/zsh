@@ -30,9 +30,11 @@ alias df='df -h'
 alias -- -='cd -'  # -- prevents - being parsed as a flag; cd - jumps to previous directory
 
 # =========================================================
-# Architecture shells (Apple Silicon)
+# Architecture shells (macOS / Apple Silicon)
 # =========================================================
 
-alias x86='arch -x86_64 /bin/zsh --login'
-alias arm='arch -arm64 /bin/zsh --login'
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias x86='arch -x86_64 /bin/zsh --login'
+  alias arm='arch -arm64 /bin/zsh --login'
+fi
 

@@ -62,11 +62,17 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # lowercase input matche
 # Fuzzy finder
 # =========================================================
 
-# macOS / Homebrew (Apple Silicon)
+# macOS / Homebrew (Apple Silicon) or Linux
 if [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
   source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
   source /opt/homebrew/opt/fzf/shell/completion.zsh
+elif [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
+  source /usr/share/fzf/key-bindings.zsh
+  source /usr/share/fzf/completion.zsh
+elif command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
 fi
+
 
 # =========================================================
 # Modular Config Files
