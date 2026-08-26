@@ -34,8 +34,15 @@ Order matters in one place: the Docker `fpath` entry must precede `compinit`.
 
 ## Prerequisites
 
+**macOS (Homebrew):**
 ```bash
 brew install eza bat fd ripgrep fzf zoxide neovim oh-my-posh
+```
+
+**Arch / Omarchy Linux:**
+```bash
+sudo pacman -S zsh eza bat fd ripgrep fzf zoxide neovim git
+mise use -g oh-my-posh@latest
 ```
 
 | Tool | Used for | If missing |
@@ -63,10 +70,9 @@ git clone <this-repo> ~/.config/zsh
 ```
 
 **2. Point zsh at it.** zsh only reads `~/.config/zsh` if `ZDOTDIR` is set *before* any
-config is loaded, which means it has to happen in `/etc/zshenv`. This file is deliberately
-not in the repo (it is root-owned), and a macOS upgrade can reset it — so keep this snippet
-handy:
+config is loaded.
 
+*Option A: System-wide (`/etc/zshenv`)*
 ```bash
 sudo tee /etc/zshenv >/dev/null <<'EOF'
 if [[ -z "$XDG_CONFIG_HOME" ]]
@@ -81,7 +87,14 @@ fi
 EOF
 ```
 
-The `-d` guard means the file is harmless on a machine where the repo isn't cloned yet.
+*Option B: User-level (`~/.zshenv` bootstrap)*
+```bash
+cat <<'EOF' > ~/.zshenv
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
+[[ -f "$ZDOTDIR/.zshenv" ]] && source "$ZDOTDIR/.zshenv"
+EOF
+```
 
 **3. Open a new terminal.** On first start the three plugins clone themselves and the state
 and cache directories are created. Expect a few "Installing …" lines once, then nothing.
@@ -89,8 +102,24 @@ and cache directories are created. Expect a few "Installing …" lines once, the
 **4. Verify.**
 
 ```bash
-echo $ZDOTDIR    # -> /Users/<you>/.config/zsh
+echo $ZDOTDIR    # -> /home/<you>/.config/zsh or /Users/<you>/.config/zsh
 ```
+
+### Omarchy Linux & Ghostty
+
+On Omarchy (or Arch-based Linux distributions) using the Ghostty terminal:
+
+1. **Set default login shell:**
+   ```bash
+   chsh -s $(which zsh)
+   ```
+
+2. **Ghostty configuration:**
+   Desktop environments cache the login `$SHELL` until a full session logout/reboot. To have Ghostty launch `zsh` immediately without waiting for a reboot, explicitly specify `command` in `~/.config/ghostty/config`:
+   ```ini
+   command = /usr/bin/zsh
+   ```
+
 
 ## Plugins
 
