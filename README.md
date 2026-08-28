@@ -20,6 +20,7 @@ Plugins are managed by a ~20-line function in `plugins.zsh`, so there is no fram
 | `prompt.zsh` | oh-my-posh initialisation. |
 | `themes/` | oh-my-posh theme JSON (version-controlled). |
 | `plugins/` | Plugin git clones. **Gitignored** — recreated automatically. |
+| `local/` | Machine-local overrides. **Gitignored** — see below. |
 
 ### Load order
 
@@ -28,9 +29,29 @@ Plugins are managed by a ~20-line function in `plugins.zsh`, so there is no fram
   -> $ZDOTDIR/.zshenv
   -> $ZDOTDIR/.zshrc
        -> fzf.zsh -> aliases.zsh -> bindings.zsh -> plugins.zsh -> node.zsh -> prompt.zsh
+       -> local/*.zsh                                            (optional, per-machine)
 ```
 
 Order matters in one place: the Docker `fpath` entry must precede `compinit`.
+
+## Machine-local overrides
+
+Every `*.zsh` file in `local/` is sourced at the very end of `.zshrc`, in alphabetical
+order. The directory is gitignored, so it is the place for anything that should not
+follow this repo to another machine: work-specific scripts, per-host aliases, paths to
+things only this machine has.
+
+```
+~/.config/zsh/local/work-aws.zsh
+```
+
+Nothing is required. The glob is guarded with `(N)`, so a machine with no `local/`
+directory starts a shell exactly as before — this repo stays machine-neutral.
+
+Because `local/` loads last, a file there can override anything the tracked config sets,
+including aliases and the prompt.
+
+To promote something to every machine, move the file out of `local/` and commit it.
 
 ## Prerequisites
 

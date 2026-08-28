@@ -99,3 +99,15 @@ source "$ZDOTDIR/node.zsh"
 # Prompt/theme
 source "$ZDOTDIR/prompt.zsh"
 
+
+# =========================================================
+# Machine-local overrides
+# =========================================================
+
+# Anything in local/ is gitignored: per-machine aliases, work scripts, secrets
+# adjacent config. Sourced last so it can override anything set above.
+# (N) makes the glob expand to nothing -- not an error -- when local/ is absent.
+for _local_rc in "$ZDOTDIR"/local/*.zsh(N); do
+  source "$_local_rc"
+done
+unset _local_rc
