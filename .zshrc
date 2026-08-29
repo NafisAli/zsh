@@ -24,15 +24,6 @@ setopt AUTOCD
 setopt NOBEEP
 setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
 
-# =========================================================
-# Smart directory navigation & lf
-# =========================================================
-
-#LF_ICONS=$(cat ~/.config/lf/icons | tr '\n' ':')
-#export LF_ICONS
-
-# Initialize zoxide
-eval "$(zoxide init zsh)"
 
 # =========================================================
 # Completion
@@ -98,6 +89,13 @@ source "$ZDOTDIR/node.zsh"
 
 # Prompt/theme
 source "$ZDOTDIR/prompt.zsh"
+
+# =========================================================
+# Smart directory navigation (zoxide)
+# =========================================================
+
+# Initialize zoxide (must run after compinit for completions to work)
+eval "$(zoxide init zsh)"
 
 
 # =========================================================
