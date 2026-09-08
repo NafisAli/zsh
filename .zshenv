@@ -26,9 +26,22 @@ fi
 export GPG_TTY=$TTY
 
 # ---------- PATH ----------
-# mise version manager shims
-[[ -d "$HOME/.local/share/mise/shims" ]] && export PATH="$HOME/.local/share/mise/shims:$PATH"
+# Deduplicate entries while preserving first occurrence
+typeset -U path PATH
 
-# Personal binaries/scripts
-export PATH="$HOME/.local/bin:$PATH"
-
+# Common directories added conditionally if they exist.
+# (N) null-glob drops nonexistent paths cleanly across OSes (macOS, Linux, etc.)
+path=(
+  "$HOME/.local/bin"(N)
+  "$HOME/.local/share/mise/shims"(N)
+  "$HOME/.opencode/bin"(N)
+  "$HOME/.cargo/bin"(N)
+  "$HOME/.bun/bin"(N)
+  "$HOME/.local/share/pnpm"(N)
+  /opt/homebrew/bin(N)
+  /opt/homebrew/sbin(N)
+  /home/linuxbrew/.linuxbrew/bin(N)
+  /home/linuxbrew/.linuxbrew/sbin(N)
+  $path
+)
+export PATH
