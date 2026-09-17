@@ -1,4 +1,20 @@
 # =========================================================
+# Ghostty shell integration
+# =========================================================
+
+# Ghostty injects its integration by launching zsh with ZDOTDIR pointed at its
+# own directory, whose .zshenv restores the real ZDOTDIR and loads the
+# integration. macOS /etc/zshenv runs first and unconditionally re-exports
+# ZDOTDIR whenever $XDG_CONFIG_HOME/zsh exists -- which clobbers Ghostty's
+# value, so its .zshenv is never read and the integration silently never loads.
+# Sourcing it by hand is the documented fallback; the guard makes it a no-op
+# outside Ghostty. Without this, ssh-terminfo never pushes xterm-ghostty to
+# remote hosts and every ssh session lands with a broken TERM.
+if [[ -n "$GHOSTTY_RESOURCES_DIR" ]]; then
+  source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+fi
+
+# =========================================================
 # History
 # =========================================================
 
