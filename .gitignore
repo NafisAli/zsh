@@ -12,3 +12,6 @@ plugins/
 # Machine-local overrides -- work scripts, per-host aliases. Never committed;
 # promote a file by moving it out of local/ and committing it.
 local/
+
+# macOS Finder metadata
+.DS_Store
